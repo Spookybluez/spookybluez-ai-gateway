@@ -1,0 +1,694 @@
+# ngrok AI Gateway Page Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Build a static replacement homepage for `SpookyBluez AI Gateway` that explains ngrok AI Gateway concepts with a polished technical landing page.
+
+**Architecture:** Create a single static `index.html` containing semantic HTML and embedded CSS, suitable for nginx or direct local preview. The page uses anchor links for navigation, avoids JavaScript, and keeps all sample credentials as obvious placeholders.
+
+**Tech Stack:** HTML5, CSS3, static nginx-compatible page, PowerShell verification commands.
+
+---
+
+## File Structure
+
+- Create: `index.html`
+  - Owns all homepage content, responsive layout, embedded styling, anchor navigation, request-flow visualization, code example, and footer.
+- Existing: `docs/superpowers/specs/2026-04-29-ngrok-ai-gateway-page-design.md`
+  - Reference only; do not modify during implementation unless the user changes the approved design.
+- Existing: `docs/superpowers/plans/2026-04-29-ngrok-ai-gateway-page.md`
+  - This implementation plan.
+
+## Scope Check
+
+The approved spec covers one static homepage replacement. It does not include deployment to the nginx host, editing `/admin/`, connecting to a real AI Gateway endpoint, or adding analytics. Those are outside this plan.
+
+### Task 1: Static Homepage
+
+**Files:**
+- Create: `index.html`
+
+- [ ] **Step 1: Create the static HTML page**
+
+Create `index.html` with this exact content:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SpookyBluez AI Gateway routes AI requests through one ngrok-powered endpoint with failover, observability, and SDK compatibility." />
+  <title>SpookyBluez AI Gateway</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #05070c;
+      --panel: #0d1220;
+      --panel-strong: #121a2b;
+      --text: #eef6ff;
+      --muted: #9eb0c7;
+      --cyan: #26f7d0;
+      --magenta: #ff4fd8;
+      --amber: #ffc857;
+      --line: rgba(158, 176, 199, 0.22);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(38, 247, 208, 0.12), transparent 28rem),
+        radial-gradient(circle at 82% 8%, rgba(255, 79, 216, 0.12), transparent 26rem),
+        linear-gradient(180deg, #05070c 0%, #080b12 45%, #05070c 100%);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(38, 247, 208, 0.65);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: var(--cyan);
+      box-shadow: 0 0 24px rgba(38, 247, 208, 0.22);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--cyan);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 48px;
+      align-items: center;
+      padding: 72px 0 88px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--cyan);
+      border: 1px solid rgba(38, 247, 208, 0.28);
+      background: rgba(38, 247, 208, 0.06);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: clamp(3rem, 8vw, 6.8rem);
+      line-height: 0.94;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .lead {
+      max-width: 660px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .button.primary {
+      background: var(--cyan);
+      color: #03100e;
+      box-shadow: 0 0 30px rgba(38, 247, 208, 0.26);
+    }
+
+    .button.secondary {
+      border-color: rgba(255, 79, 216, 0.56);
+      color: var(--text);
+      background: rgba(255, 79, 216, 0.08);
+    }
+
+    .terminal-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(13, 18, 32, 0.86);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--line);
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--magenta);
+      box-shadow: 18px 0 0 var(--amber), 36px 0 0 var(--cyan);
+      margin-right: 44px;
+    }
+
+    .terminal-body {
+      padding: 18px;
+      font-family: Consolas, "Liberation Mono", monospace;
+      font-size: 0.92rem;
+      color: #dbeafe;
+      overflow-x: auto;
+    }
+
+    .terminal-body code {
+      white-space: pre;
+    }
+
+    .token-cyan {
+      color: var(--cyan);
+    }
+
+    .token-magenta {
+      color: var(--magenta);
+    }
+
+    .section {
+      padding: 70px 0;
+      border-top: 1px solid rgba(158, 176, 199, 0.14);
+    }
+
+    .section-heading {
+      max-width: 720px;
+      margin-bottom: 28px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card,
+    .capability,
+    .flow-step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(18, 26, 43, 0.96), rgba(13, 18, 32, 0.86));
+    }
+
+    .card {
+      padding: 22px;
+    }
+
+    .card p,
+    .capability p,
+    .flow-step p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      color: var(--cyan);
+      background: rgba(38, 247, 208, 0.08);
+      border: 1px solid rgba(38, 247, 208, 0.28);
+      font-weight: 900;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      min-height: 150px;
+      padding: 18px;
+      position: relative;
+    }
+
+    .flow-step:not(:last-child)::after {
+      content: ">";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--cyan);
+      font-weight: 900;
+    }
+
+    .step-label {
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .code-section {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(320px, 1.2fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .capabilities {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .capability {
+      padding: 18px;
+    }
+
+    .capability strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .footer {
+      padding: 32px 0 44px;
+      color: var(--muted);
+      border-top: 1px solid rgba(158, 176, 199, 0.14);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 860px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero,
+      .code-section {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 44px;
+      }
+
+      .grid,
+      .capabilities {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-step {
+        min-height: 0;
+      }
+
+      .flow-step:not(:last-child)::after {
+        content: "v";
+        right: 18px;
+        top: auto;
+        bottom: -18px;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        width: min(100% - 24px, 1120px);
+      }
+
+      .nav-links,
+      .cta-row {
+        width: 100%;
+      }
+
+      .nav-links {
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 0.88rem;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .grid,
+      .capabilities {
+        grid-template-columns: 1fr;
+      }
+
+      .terminal-body {
+        font-size: 0.82rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell nav">
+    <a class="brand" href="#top" aria-label="SpookyBluez AI Gateway home">
+      <span class="brand-mark">AI</span>
+      <span>SpookyBluez AI Gateway</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="#why">Why</a>
+      <a href="#flow">Flow</a>
+      <a href="#sdk">SDK</a>
+      <a href="#capabilities">Capabilities</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="shell hero">
+      <div>
+        <p class="eyebrow">ngrok-powered model routing</p>
+        <h1>One gateway for every AI model.</h1>
+        <p class="lead">
+          Route AI requests through a single ngrok endpoint with provider failover,
+          SDK compatibility, gateway keys, and visibility into the traffic moving
+          between your app and the models it depends on.
+        </p>
+        <div class="cta-row">
+          <a class="button primary" href="#sdk">View SDK Example</a>
+          <a class="button secondary" href="#flow">See Request Flow</a>
+        </div>
+      </div>
+
+      <aside class="terminal-card" aria-label="Gateway routing preview">
+        <div class="terminal-header">
+          <span class="dot" aria-hidden="true"></span>
+          gateway-route.log
+        </div>
+        <div class="terminal-body">
+<code><span class="token-cyan">request</span>  POST /v1/chat/completions
+<span class="token-cyan">auth</span>     AI Gateway key validated
+<span class="token-cyan">model</span>    ngrok/auto
+<span class="token-cyan">route</span>    OpenAI -> Anthropic -> local
+<span class="token-magenta">status</span>   failover-ready
+<span class="token-cyan">return</span>   response streamed to app</code>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="why">
+      <div class="shell">
+        <div class="section-heading">
+          <h2>Why put a gateway in front of AI?</h2>
+          <p>
+            AI apps move faster when provider details, auth, routing, and traffic
+            inspection live at the edge instead of being hard-coded into every client.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="icon">01</div>
+            <h3>One endpoint</h3>
+            <p>Point compatible SDKs at a single gateway URL and route requests without rewriting every integration.</p>
+          </article>
+          <article class="card">
+            <div class="icon">02</div>
+            <h3>Automatic failover</h3>
+            <p>Retry across configured models, providers, or keys when a selected route cannot complete the request.</p>
+          </article>
+          <article class="card">
+            <div class="icon">03</div>
+            <h3>Traffic visibility</h3>
+            <p>Inspect, secure, and observe AI traffic before it reaches cloud providers or local inference servers.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="flow">
+      <div class="shell">
+        <div class="section-heading">
+          <h2>Request flow</h2>
+          <p>
+            The gateway validates the request, chooses a model/provider path,
+            forwards the call, and returns the response to the application.
+          </p>
+        </div>
+
+        <div class="flow" aria-label="AI Gateway request flow">
+          <article class="flow-step">
+            <span class="step-label">Step 1</span>
+            <h3>App request</h3>
+            <p>Your app sends an SDK or HTTP request to the gateway endpoint.</p>
+          </article>
+          <article class="flow-step">
+            <span class="step-label">Step 2</span>
+            <h3>Gateway auth</h3>
+            <p>ngrok validates the AI Gateway API key before routing traffic.</p>
+          </article>
+          <article class="flow-step">
+            <span class="step-label">Step 3</span>
+            <h3>Route selection</h3>
+            <p>The gateway selects a model, provider, or failover chain.</p>
+          </article>
+          <article class="flow-step">
+            <span class="step-label">Step 4</span>
+            <h3>Provider call</h3>
+            <p>The request is forwarded to a cloud provider or self-hosted model.</p>
+          </article>
+          <article class="flow-step">
+            <span class="step-label">Step 5</span>
+            <h3>Response</h3>
+            <p>The model output returns through the gateway to your app.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sdk">
+      <div class="shell code-section">
+        <div class="section-heading">
+          <h2>SDK-compatible by design</h2>
+          <p>
+            Keep your existing SDK shape. Change the base URL, use an AI Gateway
+            API key, and let the gateway handle routing behind the scenes.
+          </p>
+        </div>
+
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <span class="dot" aria-hidden="true"></span>
+            openai_gateway.py
+          </div>
+          <div class="terminal-body">
+<code>from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://your-ai-gateway.ngrok.app/v1",
+    api_key="ng-xxxxx-g1-xxxxx"
+)
+
+response = client.chat.completions.create(
+    model="ngrok/auto",
+    messages=[
+        {"role": "user", "content": "Hello from the gateway"}
+    ]
+)
+
+print(response.choices[0].message.content)</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="capabilities">
+      <div class="shell">
+        <div class="section-heading">
+          <h2>Gateway capabilities</h2>
+          <p>
+            Use the gateway as a control point for AI traffic across managed
+            providers, bring-your-own keys, and local inference.
+          </p>
+        </div>
+
+        <div class="capabilities">
+          <div class="capability"><strong>SDK compatibility</strong><p>Works with popular AI SDK patterns by changing the base URL.</p></div>
+          <div class="capability"><strong>Automatic selection</strong><p>Use routes such as model auto-selection for flexible request handling.</p></div>
+          <div class="capability"><strong>Managed keys</strong><p>Use gateway keys without exposing provider credentials to clients.</p></div>
+          <div class="capability"><strong>Bring your own keys</strong><p>Connect additional providers and account-specific access.</p></div>
+          <div class="capability"><strong>Self-hosted models</strong><p>Route to local inference runtimes alongside cloud providers.</p></div>
+          <div class="capability"><strong>Access control</strong><p>Restrict which clients can reach specific gateway routes.</p></div>
+          <div class="capability"><strong>Content controls</strong><p>Apply request or response modification policies at the gateway.</p></div>
+          <div class="capability"><strong>Observability</strong><p>Inspect AI request behavior, latency, headers, and routing outcomes.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer-content">
+      <span>SpookyBluez AI Gateway</span>
+      <span>&copy; 2026 SpookyBluez. Built for routed, observable AI traffic.</span>
+    </div>
+  </footer>
+</body>
+</html>
+```
+
+- [ ] **Step 2: Verify the page file exists**
+
+Run:
+
+```powershell
+Test-Path .\index.html
+```
+
+Expected output:
+
+```text
+True
+```
+
+- [ ] **Step 3: Verify no real API key is present**
+
+Run:
+
+```powershell
+Select-String -Path .\index.html -Pattern 'sk-|xox|ghp_|AIza|AKIA|ng-[A-Za-z0-9]{8,}-g1-[A-Za-z0-9]{8,}'
+```
+
+Expected output: no matches.
+
+- [ ] **Step 4: Verify required sections are present**
+
+Run:
+
+```powershell
+Select-String -Path .\index.html -Pattern 'id="why"|id="flow"|id="sdk"|id="capabilities"|SpookyBluez AI Gateway'
+```
+
+Expected output: matches for each section ID and the page brand.
+
+- [ ] **Step 5: Preview with a local static server**
+
+Run:
+
+```powershell
+python -m http.server 8080
+```
+
+Expected output includes:
+
+```text
+Serving HTTP on
+```
+
+Open `http://localhost:8080/` in a browser and verify the page renders.
+
+- [ ] **Step 6: Commit the static page and plan documents**
+
+Run:
+
+```powershell
+git add .\index.html .\docs\superpowers\specs\2026-04-29-ngrok-ai-gateway-page-design.md .\docs\superpowers\plans\2026-04-29-ngrok-ai-gateway-page.md
+git commit -m "feat: add AI Gateway landing page"
+```
+
+Expected result: one commit containing the page, approved design spec, and implementation plan.
