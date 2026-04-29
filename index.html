@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="SpookyBluez AI Gateway routes AI requests through one ngrok-powered endpoint with failover, observability, and SDK compatibility." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SpookyBluez AI Gateway routes AI requests through one ngrok-powered endpoint with failover, observability, and SDK compatibility.">
   <title>SpookyBluez AI Gateway</title>
   <style>
     :root {
@@ -282,6 +282,9 @@
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 12px;
       align-items: stretch;
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
     .flow-step {
@@ -451,7 +454,7 @@
 <code><span class="token-cyan">request</span>  POST /v1/chat/completions
 <span class="token-cyan">auth</span>     AI Gateway key validated
 <span class="token-cyan">model</span>    ngrok/auto
-<span class="token-cyan">route</span>    OpenAI -> Anthropic -> local
+<span class="token-cyan">route</span>    OpenAI -&gt; Anthropic -&gt; local
 <span class="token-magenta">status</span>   failover-ready
 <span class="token-cyan">return</span>   response streamed to app</code>
         </div>
@@ -498,33 +501,33 @@
           </p>
         </div>
 
-        <div class="flow" aria-label="AI Gateway request flow">
-          <article class="flow-step">
+        <ul class="flow">
+          <li class="flow-step">
             <span class="step-label">Step 1</span>
             <h3>App request</h3>
             <p>Your app sends an SDK or HTTP request to the gateway endpoint.</p>
-          </article>
-          <article class="flow-step">
+          </li>
+          <li class="flow-step">
             <span class="step-label">Step 2</span>
             <h3>Gateway auth</h3>
             <p>ngrok validates the AI Gateway API key before routing traffic.</p>
-          </article>
-          <article class="flow-step">
+          </li>
+          <li class="flow-step">
             <span class="step-label">Step 3</span>
             <h3>Route selection</h3>
             <p>The gateway selects a model, provider, or failover chain.</p>
-          </article>
-          <article class="flow-step">
+          </li>
+          <li class="flow-step">
             <span class="step-label">Step 4</span>
             <h3>Provider call</h3>
             <p>The request is forwarded to a cloud provider or self-hosted model.</p>
-          </article>
-          <article class="flow-step">
+          </li>
+          <li class="flow-step">
             <span class="step-label">Step 5</span>
             <h3>Response</h3>
             <p>The model output returns through the gateway to your app.</p>
-          </article>
-        </div>
+          </li>
+        </ul>
       </div>
     </section>
 
