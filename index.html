@@ -92,6 +92,14 @@
       color: var(--cyan);
     }
 
+    .nav-links a:focus-visible,
+    .button:focus-visible,
+    .footer-links a:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 4px;
+      border-radius: 6px;
+    }
+
     .hero {
       display: grid;
       grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
@@ -346,6 +354,21 @@
       flex-wrap: wrap;
     }
 
+    .footer-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--cyan);
+    }
+
     @media (max-width: 860px) {
       .nav {
         align-items: flex-start;
@@ -425,6 +448,7 @@
       <a href="#flow">Flow</a>
       <a href="#sdk">SDK</a>
       <a href="#capabilities">Capabilities</a>
+      <a href="https://ngrok.com/docs/ai-gateway/overview">Docs</a>
     </nav>
   </header>
 
@@ -442,6 +466,7 @@
         <div class="cta-row">
           <a class="button primary" href="#sdk">View SDK Example</a>
           <a class="button secondary" href="#flow">See Request Flow</a>
+          <a class="button secondary" href="https://2144-204-225-80-70.ngrok-free.app">Open Public Tunnel</a>
         </div>
       </div>
 
@@ -595,6 +620,11 @@ print(response.choices[0].message.content)</code>
     <div class="shell footer-content">
       <span>SpookyBluez AI Gateway</span>
       <span>&copy; 2026 SpookyBluez. Built for routed, observable AI traffic.</span>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="https://ngrok.com/docs/ai-gateway/overview">AI Gateway Docs</a>
+        <a href="https://ngrok.com/docs/ai-gateway/sdks">SDK Guide</a>
+        <a href="https://github.com/spookybluez">GitHub</a>
+      </nav>
     </div>
   </footer>
 </body>
