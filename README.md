@@ -1,10 +1,15 @@
 # SpookyBluez AI Gateway
 
+[![Deploy Cloudflare Pages](https://github.com/Spookybluez/spookybluez-ai-gateway/actions/workflows/deploy-cloudflare-pages.yml/badge.svg)](https://github.com/Spookybluez/spookybluez-ai-gateway/actions/workflows/deploy-cloudflare-pages.yml)
+[![Live Site](https://img.shields.io/badge/live-spookybluez--ai--gateway.pages.dev-26f7d0)](https://spookybluez-ai-gateway.pages.dev)
+
 Static landing page for the SpookyBluez AI Gateway demo.
 
 Live site:
 
 https://spookybluez-ai-gateway.pages.dev
+
+![SpookyBluez AI Gateway homepage screenshot](assets/screenshot.png)
 
 ## What This Is
 
