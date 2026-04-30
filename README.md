@@ -11,6 +11,10 @@ https://spookybluez-ai-gateway.pages.dev
 
 ![SpookyBluez AI Gateway homepage screenshot](assets/screenshot.png)
 
+Mobile preview:
+
+![SpookyBluez AI Gateway mobile screenshot](assets/screenshot-mobile.png)
+
 ## What This Is
 
 This page explains a simple AI Gateway pattern:
@@ -26,6 +30,7 @@ This page explains a simple AI Gateway pattern:
 - `404.html` - matching Cloudflare Pages fallback page
 - `DEPLOYMENT.md` - deployment and rollback notes
 - `.github/workflows/deploy-cloudflare-pages.yml` - GitHub Actions deploy workflow
+- `docs/ROADMAP.md` - next project issues and priorities
 
 ## Local Preview
 
