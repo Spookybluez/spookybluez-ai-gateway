@@ -1,0 +1,59 @@
+# SpookyBluez AI Gateway
+
+Static landing page for the SpookyBluez AI Gateway demo.
+
+Live site:
+
+https://spookybluez-ai-gateway.pages.dev
+
+## What This Is
+
+This page explains a simple AI Gateway pattern:
+
+- Route AI requests through one endpoint.
+- Keep provider details behind a gateway.
+- Show how SDKs can point at a gateway base URL.
+- Highlight failover, observability, access control, and self-hosted model routing.
+
+## Files
+
+- `index.html` - production landing page
+- `404.html` - matching Cloudflare Pages fallback page
+- `DEPLOYMENT.md` - deployment and rollback notes
+- `.github/workflows/deploy-cloudflare-pages.yml` - GitHub Actions deploy workflow
+
+## Local Preview
+
+```powershell
+python -m http.server 8080
+```
+
+Then open:
+
+```text
+http://localhost:8080/
+```
+
+## Validate
+
+```powershell
+npx --yes html-validate index.html 404.html
+```
+
+## Deploy Manually
+
+```powershell
+New-Item -ItemType Directory -Force -Path .\dist | Out-Null
+Copy-Item .\index.html .\dist\index.html -Force
+Copy-Item .\404.html .\dist\404.html -Force
+npx --yes wrangler pages deploy .\dist --project-name=spookybluez-ai-gateway --branch=master --commit-dirty=true
+```
+
+## GitHub Actions Deploy
+
+The workflow expects these repository secrets:
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+
+Create a narrow Cloudflare token with Cloudflare Pages edit access, add both secrets in GitHub, and pushes to `master` will deploy the site.

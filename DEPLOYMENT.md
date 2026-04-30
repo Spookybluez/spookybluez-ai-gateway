@@ -4,18 +4,19 @@
 
 - Local nginx site: `http://192.168.1.154/`
 - Cloudflare Pages site: `https://spookybluez-ai-gateway.pages.dev`
-- Current ngrok tunnel: `https://2144-204-225-80-70.ngrok-free.app`
-- Server web root: `/var/www/html`
-- Live page: `/var/www/html/index.html`
+- GitHub repository: `https://github.com/Spookybluez/spookybluez-ai-gateway`
+- Former Pi/ngrok mirror: removed from `/var/www/html/index.html`
+- Former ngrok tunnel: `https://2144-204-225-80-70.ngrok-free.app`
 
 ## Deploy
 
-Upload the local `index.html` to the Raspberry Pi, back up the existing live file, and replace it.
+Deploy the static site to Cloudflare Pages:
 
-```bash
-sudo cp /var/www/html/index.html /var/www/html/index-backup-YYYYMMDD-HHMMSS.html
-sudo cp /tmp/index.html /var/www/html/index.html
-sudo chmod 0644 /var/www/html/index.html
+```powershell
+New-Item -ItemType Directory -Force -Path .\dist | Out-Null
+Copy-Item .\index.html .\dist\index.html -Force
+Copy-Item .\404.html .\dist\404.html -Force
+npx --yes wrangler pages deploy .\dist --project-name=spookybluez-ai-gateway --branch=master --commit-dirty=true
 ```
 
 ## Rollback
@@ -26,13 +27,17 @@ The original portfolio page from the first deployment is backed up on the server
 sudo cp /var/www/html/index-portfolio-backup-20260429-165825.html /var/www/html/index.html
 ```
 
-After rollback or deploy, verify:
+The last AI Gateway mirror page before deleting the Pi homepage is backed up on the server:
+
+```bash
+sudo cp /var/www/html/index-cloudflare-link-backup-20260429-191348.html /var/www/html/index.html
+```
+
+After restoring either file, verify the Pi mirror:
 
 ```bash
 curl -I http://192.168.1.154/
 ```
-
-Then open the local or ngrok URL in a browser.
 
 ## Cloudflare Pages
 
@@ -47,3 +52,12 @@ Production URL:
 ```text
 https://spookybluez-ai-gateway.pages.dev
 ```
+
+## GitHub Actions
+
+The repository includes `.github/workflows/deploy-cloudflare-pages.yml`.
+
+Add these GitHub repository secrets to enable automatic deploys on pushes to `master`:
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
