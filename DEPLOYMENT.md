@@ -3,6 +3,7 @@
 ## Live Targets
 
 - Local nginx site: `http://192.168.1.154/`
+- Cloudflare Pages site: `https://spookybluez-ai-gateway.pages.dev`
 - Current ngrok tunnel: `https://2144-204-225-80-70.ngrok-free.app`
 - Server web root: `/var/www/html`
 - Live page: `/var/www/html/index.html`
@@ -32,3 +33,17 @@ curl -I http://192.168.1.154/
 ```
 
 Then open the local or ngrok URL in a browser.
+
+## Cloudflare Pages
+
+The static site is also deployed to Cloudflare Pages:
+
+```bash
+npx --yes wrangler pages deploy ./dist --project-name=spookybluez-ai-gateway --branch=master --commit-dirty=true
+```
+
+Production URL:
+
+```text
+https://spookybluez-ai-gateway.pages.dev
+```
