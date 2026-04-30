@@ -341,6 +341,27 @@
       margin-bottom: 6px;
     }
 
+    .demo-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      border: 1px solid rgba(38, 247, 208, 0.28);
+      border-radius: 8px;
+      padding: 28px;
+      background:
+        linear-gradient(135deg, rgba(38, 247, 208, 0.1), rgba(255, 79, 216, 0.08)),
+        rgba(13, 18, 32, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .demo-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
     .footer {
       padding: 32px 0 44px;
       color: var(--muted);
@@ -404,6 +425,14 @@
         bottom: -18px;
         transform: none;
       }
+
+      .demo-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-actions {
+        justify-content: flex-start;
+      }
     }
 
     @media (max-width: 560px) {
@@ -423,6 +452,10 @@
       }
 
       .button {
+        width: 100%;
+      }
+
+      .demo-actions {
         width: 100%;
       }
 
@@ -448,6 +481,7 @@
       <a href="#flow">Flow</a>
       <a href="#sdk">SDK</a>
       <a href="#capabilities">Capabilities</a>
+      <a href="#demo">Demo</a>
       <a href="https://ngrok.com/docs/ai-gateway/overview">Docs</a>
     </nav>
   </header>
@@ -611,6 +645,26 @@ print(response.choices[0].message.content)</code>
           <div class="capability"><strong>Access control</strong><p>Restrict which clients can reach specific gateway routes.</p></div>
           <div class="capability"><strong>Content controls</strong><p>Apply request or response modification policies at the gateway.</p></div>
           <div class="capability"><strong>Observability</strong><p>Inspect AI request behavior, latency, headers, and routing outcomes.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="demo">
+      <div class="shell">
+        <div class="demo-panel">
+          <div>
+            <p class="eyebrow">live demo</p>
+            <h2>Try the public gateway page.</h2>
+            <p class="lead">
+              This static demo is published on Cloudflare Pages and mirrored locally
+              on the lab network for quick iteration.
+            </p>
+          </div>
+          <div class="demo-actions">
+            <a class="button primary" href="https://spookybluez-ai-gateway.pages.dev">Open Demo</a>
+            <a class="button secondary" href="https://github.com/spookybluez">GitHub</a>
+            <a class="button secondary" href="mailto:spookybluez@example.com">Contact</a>
+          </div>
         </div>
       </div>
     </section>
