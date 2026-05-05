@@ -28,10 +28,10 @@ The Pages Function at `functions/plugins/webhooks/[[route]].js` proxies these pu
 - `/plugins/webhooks/power-automate`
 - `/plugins/webhooks/google-apps-script`
 
-Set this Cloudflare Pages environment variable in production:
+This Cloudflare Pages environment variable is configured in `wrangler.jsonc`:
 
 ```text
-OPENCLAW_ORIGIN_BASE_URL=https://YOUR-OPENCLAW-TUNNEL-HOST
+OPENCLAW_ORIGIN_BASE_URL=https://openclaw.spookybluez-ai-gateway.dev
 ```
 
 The tunnel host should forward to the local Gateway at:

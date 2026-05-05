@@ -1,0 +1,8 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "spookybluez-ai-gateway",
+  "pages_build_output_dir": "dist",
+  "vars": {
+    "OPENCLAW_ORIGIN_BASE_URL": "https://openclaw.spookybluez-ai-gateway.dev"
+  }
+}
