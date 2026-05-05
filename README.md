@@ -5,6 +5,17 @@
 
 Static landing page for the SpookyBluez AI Gateway demo.
 
+It also includes a Cloudflare Pages Function proxy for OpenClaw workflow webhooks:
+
+```text
+https://spookybluez-ai-gateway.pages.dev/plugins/webhooks/github-actions
+https://spookybluez-ai-gateway.pages.dev/plugins/webhooks/make
+https://spookybluez-ai-gateway.pages.dev/plugins/webhooks/power-automate
+https://spookybluez-ai-gateway.pages.dev/plugins/webhooks/google-apps-script
+```
+
+Set the Cloudflare Pages environment variable `OPENCLAW_ORIGIN_BASE_URL` to the public HTTPS origin for the local OpenClaw tunnel. The proxy forwards only the four supported webhook paths and keeps OpenClaw's own bearer-secret validation intact.
+
 Live site:
 
 https://spookybluez-ai-gateway.pages.dev
@@ -28,6 +39,7 @@ This page explains a simple AI Gateway pattern:
 
 - `index.html` - production landing page
 - `404.html` - matching Cloudflare Pages fallback page
+- `functions/plugins/webhooks/[[route]].js` - OpenClaw webhook proxy
 - `DEPLOYMENT.md` - deployment and rollback notes
 - `.github/workflows/deploy-cloudflare-pages.yml` - GitHub Actions deploy workflow
 - `docs/ROADMAP.md` - next project issues and priorities

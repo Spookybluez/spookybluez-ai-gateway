@@ -19,6 +19,27 @@ Copy-Item .\404.html .\dist\404.html -Force
 npx --yes wrangler pages deploy .\dist --project-name=spookybluez-ai-gateway --branch=master --commit-dirty=true
 ```
 
+## OpenClaw Webhook Proxy
+
+The Pages Function at `functions/plugins/webhooks/[[route]].js` proxies these public routes to the configured OpenClaw tunnel origin:
+
+- `/plugins/webhooks/github-actions`
+- `/plugins/webhooks/make`
+- `/plugins/webhooks/power-automate`
+- `/plugins/webhooks/google-apps-script`
+
+Set this Cloudflare Pages environment variable in production:
+
+```text
+OPENCLAW_ORIGIN_BASE_URL=https://YOUR-OPENCLAW-TUNNEL-HOST
+```
+
+The tunnel host should forward to the local Gateway at:
+
+```text
+http://127.0.0.1:18789
+```
+
 ## Rollback
 
 The original portfolio page from the first deployment is backed up on the server:
