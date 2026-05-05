@@ -29,17 +29,38 @@ export async function onRequest(context) {
     return json({ ok: false, error: "OpenClaw origin is invalid." }, 503);
   }
 
+  const requestBody = await readLimitedText(request, 65536);
+  if (!requestBody.ok) {
+    return json({ ok: false, error: requestBody.error }, 413);
+  }
+  const requestPayload = parseJsonObject(requestBody.value);
+
   const targetUrl = new URL(`/plugins/webhooks/${route}`, origin);
   targetUrl.search = url.search;
 
   const upstreamResponse = await fetch(targetUrl, {
     method: "POST",
     headers: buildForwardHeaders(request),
-    body: request.body,
+    body: requestBody.value,
     redirect: "manual",
   });
 
-  return new Response(upstreamResponse.body, {
+  const responseBody = await upstreamResponse.text();
+  const responsePayload = parseJsonObject(responseBody);
+
+  if (env.POWER_AUTOMATE_NOTIFICATION_URL) {
+    context.waitUntil(
+      notifyPowerAutomate({
+        url: env.POWER_AUTOMATE_NOTIFICATION_URL,
+        route,
+        requestPayload,
+        responsePayload,
+        status: upstreamResponse.status,
+      }),
+    );
+  }
+
+  return new Response(responseBody, {
     status: upstreamResponse.status,
     statusText: upstreamResponse.statusText,
     headers: buildResponseHeaders(upstreamResponse),
@@ -92,6 +113,56 @@ function copyHeader(source, target, name) {
   if (value) {
     target.set(name, value);
   }
+}
+
+async function readLimitedText(request, maxBytes) {
+  const text = await request.text();
+  if (new TextEncoder().encode(text).byteLength > maxBytes) {
+    return { ok: false, error: "Request body is too large." };
+  }
+  return { ok: true, value: text };
+}
+
+function parseJsonObject(text) {
+  try {
+    const value = JSON.parse(text);
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      return value;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+async function notifyPowerAutomate(params) {
+  const { url, route, requestPayload, responsePayload, status } = params;
+  const flow = responsePayload?.result?.flow;
+  const goal = typeof requestPayload?.goal === "string" ? requestPayload.goal : "OpenClaw workflow event";
+  const ok = Boolean(responsePayload?.ok);
+  const title = ok ? `OpenClaw: ${route}` : `OpenClaw alert: ${route}`;
+  const message = ok
+    ? compactMessage(`Queued: ${goal}`)
+    : compactMessage(`Webhook returned HTTP ${status}`);
+
+  await fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      title,
+      message,
+      route,
+      status,
+      ok,
+      goal,
+      flowId: typeof flow?.flowId === "string" ? flow.flowId : null,
+      source: "spookybluez-ai-gateway",
+    }),
+  });
+}
+
+function compactMessage(value) {
+  return value.length > 180 ? `${value.slice(0, 177)}...` : value;
 }
 
 function json(body, status, extraHeaders = {}) {

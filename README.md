@@ -16,6 +16,8 @@ https://spookybluez-ai-gateway.pages.dev/plugins/webhooks/google-apps-script
 
 The Cloudflare Pages environment variable `OPENCLAW_ORIGIN_BASE_URL` is configured in `wrangler.jsonc` as `https://openclaw.spookybluez-ai-gateway.dev`. The proxy forwards only the four supported webhook paths and keeps OpenClaw's own bearer-secret validation intact.
 
+For phone/watch notifications, set the optional Cloudflare Pages secret `POWER_AUTOMATE_NOTIFICATION_URL` to a Power Automate flow URL. When present, the webhook proxy sends a compact notification payload after forwarding the event to OpenClaw.
+
 Live site:
 
 https://spookybluez-ai-gateway.pages.dev

@@ -40,6 +40,31 @@ The tunnel host should forward to the local Gateway at:
 http://127.0.0.1:18789
 ```
 
+## Power Automate Notifications
+
+To mirror alerts to a phone and Da Fit watch, create a Power Automate flow with the trigger **When an HTTP request is received** and the action **Send me a mobile notification**.
+
+Set this Cloudflare Pages secret to the flow trigger URL:
+
+```text
+POWER_AUTOMATE_NOTIFICATION_URL=https://...
+```
+
+Expected notification payload from the Pages Function:
+
+```json
+{
+  "title": "OpenClaw: github-actions",
+  "message": "Queued: Review the latest workflow failure.",
+  "route": "github-actions",
+  "status": 200,
+  "ok": true,
+  "goal": "Review the latest workflow failure.",
+  "flowId": "uuid-or-null",
+  "source": "spookybluez-ai-gateway"
+}
+```
+
 ## Rollback
 
 The original portfolio page from the first deployment is backed up on the server:
